@@ -20,6 +20,8 @@ module.exports = app => {
     app.post("/api/register", (req, res) => {
         console.log("Received registration request!");
 
+        // TODO: Process photo upload
+
         // Store user input in variables
         let { email, username, password, description } = req.body;
 
@@ -100,9 +102,11 @@ module.exports = app => {
         });
     });
 
-    // Updates user information route
+    // Update user information route
     app.post("/api/user/update", (req, res) => {
         console.log("Received user update request!");
+
+        // TODO: Process photo upload
 
         // Store user input in variables
         let { uuid, username, description } = req.body;
@@ -251,4 +255,6 @@ module.exports = app => {
             });
         });
     });
+
+    // TODO: Login route
 };
