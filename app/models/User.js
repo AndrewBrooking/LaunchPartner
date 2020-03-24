@@ -18,6 +18,9 @@ const UserSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
+    description: {
+        type: String
+    },
     joined: {
         type: Date,
         default: Date.now

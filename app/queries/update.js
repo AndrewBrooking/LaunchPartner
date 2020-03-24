@@ -19,6 +19,10 @@ module.exports = {
             values.profile_pic = data.profile_pic;
         }
 
+        if (data.description) {
+            values.description = data.description;
+        }
+
         return db.User.findByIdAndUpdate(data.uuid, values);
     }
 

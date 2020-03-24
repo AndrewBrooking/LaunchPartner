@@ -21,5 +21,10 @@ module.exports = {
     // Obtain user data for login processing
     getUserForLogin: username => {
         return db.User.findOne({username: new RegExp(username, "i")});
+    },
+
+    // Obtain user for password verification/change
+    getUserPassword: uuid => {
+        return db.findById(uuid);
     }
 };

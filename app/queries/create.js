@@ -10,6 +10,7 @@ module.exports = {
             username: data.username,
             password: data.password,
             profile_pic: data.profile_pic,
+            description: data.description,
             joined: Date.now()
         });
     }
