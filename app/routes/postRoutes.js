@@ -77,7 +77,9 @@ module.exports = (app, upload) => {
             queries.create.newUser(data).then(user => {
                 console.log(`Success! New user registered! (${user._id})`);
 
-                // Success, return UUID
+                // Success, create session and return UUID
+                req.session.uuid = user._id;
+                
                 res.status(200).json({
                     error: false,
                     msg: "Success",
@@ -119,6 +121,15 @@ module.exports = (app, upload) => {
             return res.status(400).json({
                 error: true,
                 msg: "Provided UUID is not valid"
+            });
+            
+        // Validate session and UUID match
+        } else if (uuid !== req.session.uuid) {
+            console.log("Failed to update user! Error: invalid session");
+
+            return res.status(400).json({
+                error: true,
+                msg: "Session/UUID mismatch"
             });
         }
 
@@ -319,7 +330,9 @@ module.exports = (app, upload) => {
 
                 console.log(`Success! User logged in! (${user._id})`);
 
-                // Success, return UUID
+                // Success, create session and return UUID
+                req.session.uuid = user._id;
+
                 res.status(200).json({
                     error: false,
                     msg: "Success",
@@ -342,5 +355,26 @@ module.exports = (app, upload) => {
                 msg: "POST request failed to find user"
             });
         });
+    });
+
+    // Logout route
+    app.post("/api/logout", (req, res) => {
+
+        // Destroy user session
+        req.session.destroy(err => {
+
+            // Check for errors
+            if (err) {
+                console.log(err);
+
+                return res.status(400).json({
+                    error: true,
+                    msg: "POST request failed to logout user"
+                });
+            }
+
+            // Redirect back to homepage
+            res.redirect("/");
+        })
     });
 };
