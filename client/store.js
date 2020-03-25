@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import "./actions";
+import { LOGIN, LOGOUT, SEARCH } from "./actions";
 
 // Define initial state
 const initialState = {
@@ -11,15 +11,15 @@ const initialState = {
 function appEvent(state = initialState, action) {
     switch (action.type) {
         case LOGIN:
-            return Object.assign({}, state, { uuid: action.uuid });
+            state.uuid = action.payload.uuid;
         case LOGOUT:
-            return Object.assign({}, state, { uuid: "" });
+            state.uuid = "";
         case SEARCH:
-            return Object.assign({}, state, { search: action.term });
-        default:
-            return state;
+            state.search = action.payload.term;
     }
+
+    return state;
 }
 
-// Create store
-export const store = createStore(appEvent);
+// Create adn export store
+export default createStore(appEvent);

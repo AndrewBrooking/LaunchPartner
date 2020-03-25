@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { login } from "../actions";
+import { login } from "../../actions";
 
 function Register(dispatch) {
     let input;
@@ -8,7 +8,7 @@ function Register(dispatch) {
         <form onSubmit={e => {
             e.preventDefault()
 
-            if(!input.value.trim()) {
+            if (!input.value.trim()) {
                 return;
             }
 

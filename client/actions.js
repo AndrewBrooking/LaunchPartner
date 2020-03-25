@@ -5,7 +5,7 @@ export const SEARCH = "SEARCH";
 
 // Create action creators
 export function login(uuid) {
-    return { type: LOGIN, uuid };
+    return { type: LOGIN, payload: { uuid } };
 }
 
 export function logout() {
@@ -13,5 +13,5 @@ export function logout() {
 }
 
 export function search(term) {
-    return { type: SEARCH, term };
+    return { type: SEARCH, payload: { term } };
 }

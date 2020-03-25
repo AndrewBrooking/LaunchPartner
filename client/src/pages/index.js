@@ -1,18 +1,12 @@
 import Link from "next/link";
 import { Provider } from "react-redux";
 import store from "../../store";
-import Login from "../components/Login";
-import Register from "../components/Register";
+import App from "./App";
 
-export default function App() {
+export default function Index() {
     return (
         <Provider store={store}>
-            Hello World!
-
-            <br />
-
-            <Login />
-            <Register />
+            <App />
         </Provider>
     );
 }
