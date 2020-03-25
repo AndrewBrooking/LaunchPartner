@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const upload = multer({ dest: 'uploads/' });
 
 // Constants
 const PORT = process.env.PORT || 3001;
@@ -14,12 +15,6 @@ const app = express();
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use(multer({ dest: "./uploads/",
-  rename: function (fieldname, filename) {
-    return filename;
-  }
- }));
 
 // Serve up static assets
 if (process.env.NODE_ENV === "production") {
@@ -35,7 +30,7 @@ mongoose.connect(MONGODB_URI, {
 
 // Import API routes
 require("./app/routes/getRoutes")(app);
-require("./app/routes/postRoutes")(app);
+require("./app/routes/postRoutes")(app, upload);
 
 // Send every request to the React app
 // Define any API routes before this runs

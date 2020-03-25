@@ -7,10 +7,10 @@ const validator = require("validator");
 // Constant for bcrypt's hashing method
 const SALT_ROUNDS = 10;
 
-module.exports = app => {
+module.exports = (app, upload) => {
 
     // Register new user route
-    app.post("/api/register", (req, res) => {
+    app.post("/api/register", upload.single("photo"), (req, res) => {
         console.log("Received registration request!");
 
         // Get user input from request
@@ -24,7 +24,7 @@ module.exports = app => {
         description = ("" + description).trim();
 
         // Process photo upload
-        profile_pic.data = fs.readFileSync(req.files.photo.path);
+        profile_pic.data = fs.readFileSync(req.files.photo);
         profile_pic.contentType = "image/png";
 
         // Check email is valid and not empty
@@ -103,7 +103,7 @@ module.exports = app => {
     });
 
     // Update user information route
-    app.post("/api/user/update", (req, res) => {
+    app.post("/api/user/update", upload.single("photo"), (req, res) => {
         console.log("Received user update request!");
 
         // Store user information to pass to query
@@ -163,7 +163,7 @@ module.exports = app => {
             let profile_pic = {};
 
             // Process photo upload
-            profile_pic.data = fs.readFileSync(req.files.photo.path);
+            profile_pic.data = fs.readFileSync(req.files.photo);
             profile_pic.contentType = "image/png";
 
             // Add photo to data
