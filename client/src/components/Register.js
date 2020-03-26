@@ -1,26 +1,94 @@
+import { useState } from "react";
 import { connect } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 import { login } from "../../actions";
+import { TextField } from "@material-ui/core";
+import ModalForm from "./ModalForm";
+import UploadButton from "./UploadButton";
 
-function Register(dispatch) {
-    let input;
+const useStyles = makeStyles(theme => ({
+    input: {
+        marginBottom: "1rem",
+        width: "90%"
+    }
+}));
+
+function Register() {
+    const classes = useStyles();
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [verify, setVerify] = useState("");
+    const [description, setDescription] = useState("");
+    const [photo, setPhoto] = useState(null);
 
     return (
-        <form onSubmit={e => {
-            e.preventDefault()
-
-            if (!input.value.trim()) {
-                return;
-            }
-
-            dispatch(login("REGISTER TEST"));
-            input.value = "";
+        <ModalForm buttonText="Register" onSubmit={e => {
+            // TODO
         }}>
-            <input ref={node => { input = node }} />
-            <button type="submit">Register</button>
-        </form>
+            <h2>Registration</h2>
+
+            <TextField
+                required
+                className={classes.input}
+                type="text"
+                label="Email"
+                onChange={event => setEmail(event.target.value)}
+                value={email}
+                autoComplete="current-email"
+            />
+
+            <TextField
+                required
+                className={classes.input}
+                type="text"
+                label="Username"
+                onChange={event => setUsername(event.target.value)}
+                value={username}
+                autoComplete="current-username"
+            />
+
+            <TextField
+                required
+                className={classes.input}
+                type="password"
+                label="Password"
+                onChange={event => setPassword(event.target.value)}
+                value={password}
+                autoComplete="current-password"
+            />
+
+            <TextField
+                required
+                className={classes.input}
+                type="password"
+                label="Verify Password"
+                onChange={event => setVerify(event.target.value)}
+                value={verify}
+                autoComplete="verify-password"
+            />
+
+            <TextField
+                className={classes.input}
+                type="text"
+                multiline={true}
+                rowsMax={10}
+                label="Description"
+                onChange={event => setDescription(event.target.value)}
+                value={description}
+                autoComplete="current-description"
+            />
+
+            <UploadButton setPhoto={setPhoto} />
+
+        </ModalForm>
     );
 }
 
-Register = connect()(Register);
+function mapDispatchToProps(dispatch) {
+    return {
+        login: uuid => dispatch(login(uuid))
+    };
+}
 
-export default Register;
+export default connect(null, mapDispatchToProps)(Register);
