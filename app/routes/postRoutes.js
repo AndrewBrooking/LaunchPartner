@@ -10,12 +10,14 @@ const SALT_ROUNDS = 10;
 module.exports = (app, upload) => {
 
     // Register new user route
-    app.post("/api/register", upload.single("photo"), (req, res) => {
+    app.post("/api/register", (req, res) => {
         console.log("Received registration request!");
+
+        console.log(req.body, req.file);
 
         // Get user input from request
         let { email, username, password, description } = req.body;
-        let profile_pic = {};
+        let photo = req.file;
 
         // Sanitize user input
         email = ("" + email).trim().toLowerCase();
@@ -24,8 +26,16 @@ module.exports = (app, upload) => {
         description = ("" + description).trim();
 
         // Process photo upload
-        profile_pic.data = fs.readFileSync(req.files.photo);
-        profile_pic.contentType = "image/png";
+        upload(req, res, err => {
+            if (err) {
+                console.log(err);
+
+                return res.status(500).json({
+                    error: true,
+                    msg: "Failed to upload image"
+                });
+            }
+        });
 
         // Check email is valid and not empty
         if (!validator.isEmail(email) || validator.isEmpty(email)) {
@@ -70,7 +80,7 @@ module.exports = (app, upload) => {
                 username,
                 password: hash,
                 description,
-                profile_pic
+                photo
             };
 
             // Run create new user query
@@ -105,7 +115,7 @@ module.exports = (app, upload) => {
     });
 
     // Update user information route
-    app.post("/api/user/update", upload.single("photo"), (req, res) => {
+    app.post("/api/user/update", (req, res) => {
         console.log("Received user update request!");
 
         // Store user information to pass to query
@@ -122,9 +132,10 @@ module.exports = (app, upload) => {
                 error: true,
                 msg: "Provided UUID is not valid"
             });
-            
+        }
+        
         // Validate session and UUID match
-        } else if (uuid !== req.session.uuid) {
+        if (uuid !== req.session.uuid) {
             console.log("Failed to update user! Error: invalid session");
 
             return res.status(400).json({
@@ -171,14 +182,14 @@ module.exports = (app, upload) => {
         if (req.files.photo) {
 
             // Variable to store photo
-            let profile_pic = {};
+            let photo = {};
 
             // Process photo upload
-            profile_pic.data = fs.readFileSync(req.files.photo);
-            profile_pic.contentType = "image/png";
+            photo.data = fs.readFileSync(req.files.photo);
+            photo.contentType = "image/png";
 
             // Add photo to data
-            data.profile_pic = profile_pic;
+            data.photo = photo;
         }
 
         console.log("Assembled data and validated! Updating user...");
@@ -222,6 +233,16 @@ module.exports = (app, upload) => {
             return res.status(400).json({
                 error: true,
                 msg: "Provided UUID is not valid"
+            });
+        }
+
+        // Validate session and UUID match
+        if (uuid !== req.session.uuid) {
+            console.log("Failed to update user! Error: invalid session");
+
+            return res.status(400).json({
+                error: true,
+                msg: "Session/UUID mismatch"
             });
         }
 

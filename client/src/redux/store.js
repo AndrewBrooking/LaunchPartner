@@ -3,7 +3,7 @@ import { LOGIN, LOGOUT, SEARCH } from "./actions";
 
 // Define initial state
 const initialState = {
-    uuid: "",
+    authenticated: false,
     search: ""
 };
 
@@ -11,9 +11,9 @@ const initialState = {
 function appEvent(state = initialState, action) {
     switch (action.type) {
         case LOGIN:
-            state.uuid = action.payload.uuid;
+            state.authenticated = true;
         case LOGOUT:
-            state.uuid = "";
+            state.authenticated = false;
         case SEARCH:
             state.search = action.payload.term;
     }

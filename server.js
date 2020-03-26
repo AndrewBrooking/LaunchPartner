@@ -15,7 +15,8 @@ const SESSION_LIFE = 1000 * 60 * 60;
 const SECRET = "NOT_SECURE_lp-secret";
 const REDIS_URI = process.env.REDIS_URL || "redis://localhost:6379";
 
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({ dest: "uploads" });
+const upload = multer({ storage }).single("photo");
 const client = redis.createClient(REDIS_URI);
 
 // Express App

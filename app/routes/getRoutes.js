@@ -23,25 +23,26 @@ module.exports = app => {
         });
     });
     
-    // Queries the database for a user based on their email and returns the result to the client
-    app.get("/api/users/search/email=:email", (req, res) => {
-        queries.read
-          .getUserByEmail(req.params.email)
-          .then(user => {
-            res.json({
-              error: false,
-              msg: "Success",
-              user
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            res.status(400).json({
-              error: true,
-              msg: "GET request could not be processed"
-            });
-        });
-    });
+    // NOT IN USE
+    // // Queries the database for a user based on their email and returns the result to the client
+    // app.get("/api/users/search/email=:email", (req, res) => {
+    //     queries.read
+    //       .getUserByEmail(req.params.email)
+    //       .then(user => {
+    //         res.json({
+    //           error: false,
+    //           msg: "Success",
+    //           user
+    //         });
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //         res.status(400).json({
+    //           error: true,
+    //           msg: "GET request could not be processed"
+    //         });
+    //     });
+    // });
 
     // Queries the database for all users with similar usernames and returns the result to the client
     app.get("/api/users/search/username=:username", (req, res) => {

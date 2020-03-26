@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
         border: "2px solid #000",
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-        width: "300px",
+        minWidth: "300px",
         textAlign: "center"
     },
     button: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 function ModalForm(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
         setOpen(true);

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { connect } from "react-redux";
+import Router from "next/router";
+import API from "../api/api";
 import { makeStyles } from "@material-ui/core/styles";
-import { login } from "../../actions";
+import { login } from "../redux/actions";
 import { TextField } from "@material-ui/core";
 import ModalForm from "./ModalForm";
 
@@ -12,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Login(props) {
+function Login({ login }) {
     const classes = useStyles();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -25,11 +27,22 @@ function Login(props) {
                 return;
             }
 
-            // TODO: Log user in
+            API.login(username, password).then(res => {
+                // Store UUID
+                let uuid = res.data.uuid;
 
-            props.login({ uuid: "TESTING" });
-            setUsername("");
-            setPassword("");
+                // Process login
+                login(uuid);
+
+                // Clear fields
+                setUsername("");
+                setPassword("");
+
+                // Redirect to user page
+                Router.push(`/user/${uuid}`);
+            }).catch(err => {
+                console.log(err);
+            });
         }}>
             <h2>Log In</h2>
 
@@ -58,7 +71,7 @@ function Login(props) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        login: uuid => dispatch(login(uuid))
+        login: () => dispatch(login())
     };
 }
 

@@ -9,7 +9,7 @@ module.exports = {
             email: data.email,
             username: data.username,
             password: data.password,
-            profile_pic: data.profile_pic,
+            photo: data.photo,
             description: data.description,
             joined: Date.now()
         });

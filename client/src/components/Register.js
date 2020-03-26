@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { connect } from "react-redux";
+import Router from "next/router";
+import API from "../api/api";
 import { makeStyles } from "@material-ui/core/styles";
-import { login } from "../../actions";
+import { login } from "../redux/actions";
 import { TextField } from "@material-ui/core";
 import ModalForm from "./ModalForm";
 import UploadButton from "./UploadButton";
@@ -13,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function Register() {
+function Register(props) {
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -24,7 +26,33 @@ function Register() {
 
     return (
         <ModalForm buttonText="Register" onSubmit={e => {
-            // TODO
+            e.preventDefault();
+
+            if (password === verify) {
+                API.register(email, username, password, description, photo).then(res => {
+                    // Store UUID
+                    let uuid = res.data.uuid;
+
+                    // Process login
+                    props.login();
+
+                    // Clear fields
+                    setEmail("");
+                    setUsername("");
+                    setPassword("");
+                    setVerify("");
+                    setDescription("");
+                    setPhoto(null);
+
+                    // Redirect to user page
+                    Router.push(`/user/${uuid}`);
+                }).catch(err => {
+                    console.log(err);
+                });
+            } else {
+                // TODO: Display failure message
+                console.log("Passwords do not match");
+            }
         }}>
             <h2>Registration</h2>
 

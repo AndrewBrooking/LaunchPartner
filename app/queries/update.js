@@ -15,8 +15,8 @@ module.exports = {
             values.password = data.password;
         }
 
-        if (data.profile_pic) {
-            values.profile_pic = data.profile_pic;
+        if (data.photo) {
+            values.photo = data.photo;
         }
 
         if (data.description) {

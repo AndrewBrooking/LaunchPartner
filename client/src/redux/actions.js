@@ -4,8 +4,8 @@ export const LOGOUT = "LOGOUT";
 export const SEARCH = "SEARCH";
 
 // Create action creators
-export function login(uuid) {
-    return { type: LOGIN, payload: { uuid } };
+export function login() {
+    return { type: LOGIN };
 }
 
 export function logout() {
