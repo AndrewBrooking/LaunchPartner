@@ -1,6 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import Router from "next/router";
+import { Redirect } from "react-router";
 import API from "../api/api";
 import { makeStyles } from "@material-ui/core/styles";
 import { login } from "../redux/actions";
@@ -10,12 +10,12 @@ import UploadButton from "./UploadButton";
 
 const useStyles = makeStyles(theme => ({
     input: {
-        marginBottom: "1rem",
+        marginBottom: theme.spacing(1),
         width: "90%"
     }
 }));
 
-function Register(props) {
+function Register({ login }) {
     const classes = useStyles();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -23,6 +23,11 @@ function Register(props) {
     const [verify, setVerify] = useState("");
     const [description, setDescription] = useState("");
     const [photo, setPhoto] = useState(null);
+    const [redirect, setRedirect] = useState("");
+
+    if (redirect.length > 0) {
+        return <Redirect to={redirect} />;
+    }
 
     return (
         <ModalForm buttonText="Register" onSubmit={e => {
@@ -30,11 +35,8 @@ function Register(props) {
 
             if (password === verify) {
                 API.register(email, username, password, description, photo).then(res => {
-                    // Store UUID
-                    let uuid = res.data.uuid;
-
                     // Process login
-                    props.login();
+                    login();
 
                     // Clear fields
                     setEmail("");
@@ -45,7 +47,7 @@ function Register(props) {
                     setPhoto(null);
 
                     // Redirect to user page
-                    Router.push(`/user/${uuid}`);
+                    setRedirect(`/user/${res.data.uuid}`);
                 }).catch(err => {
                     console.log(err);
                 });

@@ -12,10 +12,13 @@ function appEvent(state = initialState, action) {
     switch (action.type) {
         case LOGIN:
             state.authenticated = true;
+            break;
         case LOGOUT:
             state.authenticated = false;
+            break;
         case SEARCH:
             state.search = action.payload.term;
+            break;
     }
 
     return state;

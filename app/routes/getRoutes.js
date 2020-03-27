@@ -1,5 +1,7 @@
 // Import queries
 const queries = require("../queries/index");
+const fs = require("fs");
+const FormData = require("form-data");
 
 module.exports = app => {
     
@@ -12,7 +14,7 @@ module.exports = app => {
               error: false,
               msg: "Success",
               user
-            });
+            }).sendFile(`./${user.photo}`);
           })
           .catch(err => {
             console.log(err);

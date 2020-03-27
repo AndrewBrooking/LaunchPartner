@@ -1,6 +1,5 @@
 // Import queries and libraries
 const queries = require("../queries/index");
-const fs = require("fs");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 
@@ -10,32 +9,20 @@ const SALT_ROUNDS = 10;
 module.exports = (app, upload) => {
 
     // Register new user route
-    app.post("/api/register", (req, res) => {
+    app.post("/api/register", upload.single("photo"), (req, res) => {
         console.log("Received registration request!");
 
-        console.log(req.body, req.file);
+        // console.log(req);
 
         // Get user input from request
         let { email, username, password, description } = req.body;
-        let photo = req.file;
+        let photo = req.file.path;
 
         // Sanitize user input
         email = ("" + email).trim().toLowerCase();
         username = ("" + username).trim();
         password = ("" + password).trim();
         description = ("" + description).trim();
-
-        // Process photo upload
-        upload(req, res, err => {
-            if (err) {
-                console.log(err);
-
-                return res.status(500).json({
-                    error: true,
-                    msg: "Failed to upload image"
-                });
-            }
-        });
 
         // Check email is valid and not empty
         if (!validator.isEmail(email) || validator.isEmpty(email)) {
@@ -115,7 +102,7 @@ module.exports = (app, upload) => {
     });
 
     // Update user information route
-    app.post("/api/user/update", (req, res) => {
+    app.post("/api/user/update", upload.single("photo"), (req, res) => {
         console.log("Received user update request!");
 
         // Store user information to pass to query
@@ -179,14 +166,13 @@ module.exports = (app, upload) => {
             data.description = description;
         }
 
-        if (req.files.photo) {
+        if (req.file) {
 
             // Variable to store photo
-            let photo = {};
+            let photo = "";
 
             // Process photo upload
-            photo.data = fs.readFileSync(req.files.photo);
-            photo.contentType = "image/png";
+            photo = req.file.path;
 
             // Add photo to data
             data.photo = photo;
@@ -215,7 +201,7 @@ module.exports = (app, upload) => {
     });
 
     // Change password route
-    app.post("/api/user/security", (req, res) => {
+    app.post("/api/user/security", upload.none(), (req, res) => {
         console.log("Received user password change request!");
 
         // Get user input from request
@@ -323,7 +309,7 @@ module.exports = (app, upload) => {
     });
 
     // Login route
-    app.post("/api/login", (req, res) => {
+    app.post("/api/login", upload.none(), (req, res) => {
         console.log("Received login request!");
 
         // Get user input from request
@@ -379,7 +365,7 @@ module.exports = (app, upload) => {
     });
 
     // Logout route
-    app.post("/api/logout", (req, res) => {
+    app.post("/api/logout", upload.none(), (req, res) => {
 
         // Destroy user session
         req.session.destroy(err => {

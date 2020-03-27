@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@material-ui/core";
 
 export default function UploadButton(props) {
@@ -9,7 +10,7 @@ export default function UploadButton(props) {
                 id="upload-button"
                 multiple
                 type="file"
-                onChange={event => props.setPhoto(event.target.value)}
+                onChange={event => props.setPhoto(event.target.files[0])}
             />
             <label htmlFor="upload-button">
                 <Button variant="outlined" component="span">

@@ -4,12 +4,12 @@ import FormData from "form-data";
 export default {
     // Performs an axios GET request for a user via UUID
     getUser: uuid => {
-        return axios.get(`http://localhost:3001/api/users/${uuid}`);
+        return axios.get(`/api/users/${uuid}`);
     },
 
     // Performs an axios GET request for a user via username
     searchUser: username => {
-        return axios.get(`http://localhost:3001/api/users/search/username=${username}`);
+        return axios.get(`/api/users/search/username=${username}`);
     },
 
     // Performs an axios POST request to register a new user
@@ -25,19 +25,19 @@ export default {
             "Accept": "application/json",
             "Accept-Language": "en-US,en;q=0.8",
             "Content-Type": `multipart/form-data; boundary=${data._boundary}`
-        }
+        };
 
-        return axios.post("http://localhost:3001/api/register", data, { headers });
+        return axios.post("/api/register", data, { headers });
     },
 
     // Performs an axios POST request to login a user
     login: (username, password) => {
-        return axios.post("http://localhost:3001/api/login", { username, password });
+        return axios.post("/api/login", { username, password });
     },
 
     // Performs an axios POST request to logout a user
     logout: () => {
-        return axios.post("http://localhost:3001/api/logout");
+        return axios.post("/api/logout");
     },
 
     // Performs an axios POST request to update a user's data
@@ -63,11 +63,11 @@ export default {
             "Content-Type": `multipart/form-data; boundary=${data._boundary}`
         }
 
-        return axios.post("http://localhost:3001/api/user/update", data, { headers });
+        return axios.post("/api/user/update", data, { headers });
     },
 
     // Performs an axios POST request to update a user's password
     updatePasword: (uuid, curr_pass, new_pass) => {
-        return axios.post("http://localhost:3001/api/user/security", { uuid, curr_pass, new_pass });
+        return axios.post("/api/user/security", { uuid, curr_pass, new_pass });
     }
 };

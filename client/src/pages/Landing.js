@@ -1,3 +1,4 @@
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -7,13 +8,16 @@ const useStyles = makeStyles(theme => ({
     root: {
         backgroundColor: "#23395B",
         color: "#FAFAFA",
-        padding: "7rem 3rem",
+        padding: theme.spacing(7, 3),
         margin: "0",
         textAlign: "center"
+    },
+    gitem: {
+        padding: "0 1rem"
     }
 }));
 
-export default function App() {
+export default function Landing() {
     const classes = useStyles();
 
     return (
@@ -31,10 +35,10 @@ export default function App() {
                 justify="center"
                 alignItems="center"
             >
-                <Grid item style={{ padding: "0 1rem" }}>
+                <Grid item className={classes.gitem}>
                     <Login />
                 </Grid>
-                <Grid item style={{ padding: "0 1rem" }}>
+                <Grid item className={classes.gitem}>
                     <Register />
                 </Grid>
             </Grid>

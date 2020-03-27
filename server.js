@@ -15,16 +15,27 @@ const SESSION_LIFE = 1000 * 60 * 60;
 const SECRET = "NOT_SECURE_lp-secret";
 const REDIS_URI = process.env.REDIS_URL || "redis://localhost:6379";
 
-const storage = multer.diskStorage({ dest: "uploads" });
-const upload = multer({ storage }).single("photo");
-const client = redis.createClient(REDIS_URI);
-
-// Express App
+// Express Server
 const app = express();
+
+const storage = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, "./uploads");
+  } ,
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}.png`);
+  }
+});
+
+const upload = multer({ storage });
+
+const client = redis.createClient(REDIS_URI);
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json());
+
 app.use(session({
   name: SESSION_NAME,
   secret: SECRET,
@@ -59,7 +70,9 @@ app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "/"));
 });
 
-// Setup server listener
+// Setup app listener
 app.listen(PORT, function() {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
+
+console.log(process.cwd());
